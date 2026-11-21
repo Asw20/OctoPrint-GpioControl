@@ -1,6 +1,14 @@
 # coding=utf-8
 from __future__ import absolute_import, print_function
-from octoprint.server import user_permission
+### deprecated and removed in OctoPrint 2.0.0 
+###from octoprint.server import user_permission
+try:
+    from octoprint.access import ADMIN_GROUP
+    from octoprint.access.permissions import Permissions
+
+    ACCESS_PERMISSIONS_AVAILABLE = True
+except ImportError:
+    ACCESS_PERMISSIONS_AVAILABLE = False
 
 import octoprint.plugin
 import flask
@@ -123,8 +131,10 @@ class GpioControlPlugin(
         return dict(turnGpioOn=["id"], turnGpioOff=["id"], getGpioState=["id"])
 
     def on_api_command(self, command, data):
-        if not user_permission.can():
+###     if not user_permission.can():
+        if not ACCESS_PERMISSIONS_AVAILABLE:
             return flask.make_response("Insufficient rights", 403)
+
 
         configuration = self._settings.get(["gpio_configurations"])[int(data["id"])]
         pin = self.get_pin_number(int(configuration["pin"]))
