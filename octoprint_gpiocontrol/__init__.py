@@ -125,8 +125,7 @@ class GpioControlPlugin(
         return dict(turnGpioOn=["id"], turnGpioOff=["id"], getGpioState=["id"])
 
     def on_api_command(self, command, data):
-###     if not user_permission.can():
-		if not Permissions.PLUGIN_OCTOPRINT_GPIOCONTROL.can():
+        if not Permissions.PLUGIN_OCTOPRINT_GPIOCONTROL.can():
             return flask.make_response("Insufficient rights", 403)
 
 
