@@ -2,13 +2,7 @@
 from __future__ import absolute_import, print_function
 ### deprecated and removed in OctoPrint 2.0.0 
 ###from octoprint.server import user_permission
-try:
-    from octoprint.access import ADMIN_GROUP
-    from octoprint.access.permissions import Permissions
-
-    ACCESS_PERMISSIONS_AVAILABLE = True
-except ImportError:
-    ACCESS_PERMISSIONS_AVAILABLE = False
+from octoprint.access.permissions import Permissions, ADMIN_GROUP
 
 import octoprint.plugin
 import flask
@@ -132,7 +126,7 @@ class GpioControlPlugin(
 
     def on_api_command(self, command, data):
 ###     if not user_permission.can():
-        if not ACCESS_PERMISSIONS_AVAILABLE:
+		if not Permissions.PLUGIN_OCTOPRINT_GPIOCONTROL.can():
             return flask.make_response("Insufficient rights", 403)
 
 
